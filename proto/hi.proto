@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package="./hi";
+
+package proto;
+
+service Hi {
+	rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// code value service
+service CodeValueService {
+    rpc FindListByCodeType(FindListByCodeTypeRequest) returns (FindListByCodeTypeResponse);
+    rpc FindOneByCode(FindOneByCodeRequest) returns (FindOneByCodeResponse);
+}
+
+
+message BaseResponse {
+	int32 code = 1;
+	string message = 2;
+}
+
+message HealthCheckRequest {
+	string service = 1;
+}
+
+message HealthCheckResponse {
+	enum ServiceStatus{
+		UNKNOWN = 0;
+		SERVING = 1;
+		NOT_SERVING = 2;
+		SERVICE_UNKNOWN = 3;
+	}
+	ServiceStatus status = 1;
+}
+
+// 请求消息类型
+message FindListByCodeTypeRequest {
+    string app = 1;        // 应用标识
+    string codeType = 2;   // 代码类型
+}
+
+message FindOneByCodeRequest {
+    string app = 1;        // 应用标识
+    string codeType = 2;   // 代码类型
+    string code = 3;       // 代码
+}
+
+// 响应消息类型
+message CodeValue {
+    string code = 1;       // 代码
+    string shortName = 2;  // 简称
+    string fullName = 3;   // 全称
+    string memo = 4;       // 备注
+}
+
+message FindListByCodeTypeResponse {
+    repeated CodeValue codeValues = 1; // 返回的代码值列表
+}
+
+message FindOneByCodeResponse {
+    CodeValue codeValue = 1;           // 单个代码值
+}
