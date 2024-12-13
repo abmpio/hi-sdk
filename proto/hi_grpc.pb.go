@@ -131,8 +131,8 @@ const (
 //
 // code value service
 type CodeValueServiceClient interface {
-	FindListByCodeType(ctx context.Context, in *FindListByCodeTypeRequest, opts ...grpc.CallOption) (*FindListByCodeTypeResponse, error)
-	FindOneByCode(ctx context.Context, in *FindOneByCodeRequest, opts ...grpc.CallOption) (*FindOneByCodeResponse, error)
+	FindListByCodeType(ctx context.Context, in *FindCodeValueListByCodeTypeRequest, opts ...grpc.CallOption) (*FindCodeValueListByCodeTypeResponse, error)
+	FindOneByCode(ctx context.Context, in *FindOneCodeValueByCodeRequest, opts ...grpc.CallOption) (*FindOneCodeValueByCodeResponse, error)
 }
 
 type codeValueServiceClient struct {
@@ -143,9 +143,9 @@ func NewCodeValueServiceClient(cc grpc.ClientConnInterface) CodeValueServiceClie
 	return &codeValueServiceClient{cc}
 }
 
-func (c *codeValueServiceClient) FindListByCodeType(ctx context.Context, in *FindListByCodeTypeRequest, opts ...grpc.CallOption) (*FindListByCodeTypeResponse, error) {
+func (c *codeValueServiceClient) FindListByCodeType(ctx context.Context, in *FindCodeValueListByCodeTypeRequest, opts ...grpc.CallOption) (*FindCodeValueListByCodeTypeResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FindListByCodeTypeResponse)
+	out := new(FindCodeValueListByCodeTypeResponse)
 	err := c.cc.Invoke(ctx, CodeValueService_FindListByCodeType_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -153,9 +153,9 @@ func (c *codeValueServiceClient) FindListByCodeType(ctx context.Context, in *Fin
 	return out, nil
 }
 
-func (c *codeValueServiceClient) FindOneByCode(ctx context.Context, in *FindOneByCodeRequest, opts ...grpc.CallOption) (*FindOneByCodeResponse, error) {
+func (c *codeValueServiceClient) FindOneByCode(ctx context.Context, in *FindOneCodeValueByCodeRequest, opts ...grpc.CallOption) (*FindOneCodeValueByCodeResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FindOneByCodeResponse)
+	out := new(FindOneCodeValueByCodeResponse)
 	err := c.cc.Invoke(ctx, CodeValueService_FindOneByCode_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -169,8 +169,8 @@ func (c *codeValueServiceClient) FindOneByCode(ctx context.Context, in *FindOneB
 //
 // code value service
 type CodeValueServiceServer interface {
-	FindListByCodeType(context.Context, *FindListByCodeTypeRequest) (*FindListByCodeTypeResponse, error)
-	FindOneByCode(context.Context, *FindOneByCodeRequest) (*FindOneByCodeResponse, error)
+	FindListByCodeType(context.Context, *FindCodeValueListByCodeTypeRequest) (*FindCodeValueListByCodeTypeResponse, error)
+	FindOneByCode(context.Context, *FindOneCodeValueByCodeRequest) (*FindOneCodeValueByCodeResponse, error)
 	mustEmbedUnimplementedCodeValueServiceServer()
 }
 
@@ -181,10 +181,10 @@ type CodeValueServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedCodeValueServiceServer struct{}
 
-func (UnimplementedCodeValueServiceServer) FindListByCodeType(context.Context, *FindListByCodeTypeRequest) (*FindListByCodeTypeResponse, error) {
+func (UnimplementedCodeValueServiceServer) FindListByCodeType(context.Context, *FindCodeValueListByCodeTypeRequest) (*FindCodeValueListByCodeTypeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindListByCodeType not implemented")
 }
-func (UnimplementedCodeValueServiceServer) FindOneByCode(context.Context, *FindOneByCodeRequest) (*FindOneByCodeResponse, error) {
+func (UnimplementedCodeValueServiceServer) FindOneByCode(context.Context, *FindOneCodeValueByCodeRequest) (*FindOneCodeValueByCodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindOneByCode not implemented")
 }
 func (UnimplementedCodeValueServiceServer) mustEmbedUnimplementedCodeValueServiceServer() {}
@@ -209,7 +209,7 @@ func RegisterCodeValueServiceServer(s grpc.ServiceRegistrar, srv CodeValueServic
 }
 
 func _CodeValueService_FindListByCodeType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindListByCodeTypeRequest)
+	in := new(FindCodeValueListByCodeTypeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -221,13 +221,13 @@ func _CodeValueService_FindListByCodeType_Handler(srv interface{}, ctx context.C
 		FullMethod: CodeValueService_FindListByCodeType_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CodeValueServiceServer).FindListByCodeType(ctx, req.(*FindListByCodeTypeRequest))
+		return srv.(CodeValueServiceServer).FindListByCodeType(ctx, req.(*FindCodeValueListByCodeTypeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CodeValueService_FindOneByCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindOneByCodeRequest)
+	in := new(FindOneCodeValueByCodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -239,7 +239,7 @@ func _CodeValueService_FindOneByCode_Handler(srv interface{}, ctx context.Contex
 		FullMethod: CodeValueService_FindOneByCode_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CodeValueServiceServer).FindOneByCode(ctx, req.(*FindOneByCodeRequest))
+		return srv.(CodeValueServiceServer).FindOneByCode(ctx, req.(*FindOneCodeValueByCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -258,6 +258,154 @@ var CodeValueService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FindOneByCode",
 			Handler:    _CodeValueService_FindOneByCode_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "hi.proto",
+}
+
+const (
+	SettingsService_FindListByAppName_FullMethodName = "/proto.SettingsService/FindListByAppName"
+	SettingsService_FindByName_FullMethodName        = "/proto.SettingsService/FindByName"
+)
+
+// SettingsServiceClient is the client API for SettingsService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// 定义 Settings 服务
+type SettingsServiceClient interface {
+	// 根据 appNameList 获取 Setting 列表
+	FindListByAppName(ctx context.Context, in *FindSettingListByAppNameRequest, opts ...grpc.CallOption) (*FindSettingListByAppNameResponse, error)
+	// 根据 appName 和 name 获取单个 Setting
+	FindByName(ctx context.Context, in *FindSettingByNameRequest, opts ...grpc.CallOption) (*FindSettingByNameResponse, error)
+}
+
+type settingsServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewSettingsServiceClient(cc grpc.ClientConnInterface) SettingsServiceClient {
+	return &settingsServiceClient{cc}
+}
+
+func (c *settingsServiceClient) FindListByAppName(ctx context.Context, in *FindSettingListByAppNameRequest, opts ...grpc.CallOption) (*FindSettingListByAppNameResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FindSettingListByAppNameResponse)
+	err := c.cc.Invoke(ctx, SettingsService_FindListByAppName_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *settingsServiceClient) FindByName(ctx context.Context, in *FindSettingByNameRequest, opts ...grpc.CallOption) (*FindSettingByNameResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FindSettingByNameResponse)
+	err := c.cc.Invoke(ctx, SettingsService_FindByName_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// SettingsServiceServer is the server API for SettingsService service.
+// All implementations must embed UnimplementedSettingsServiceServer
+// for forward compatibility.
+//
+// 定义 Settings 服务
+type SettingsServiceServer interface {
+	// 根据 appNameList 获取 Setting 列表
+	FindListByAppName(context.Context, *FindSettingListByAppNameRequest) (*FindSettingListByAppNameResponse, error)
+	// 根据 appName 和 name 获取单个 Setting
+	FindByName(context.Context, *FindSettingByNameRequest) (*FindSettingByNameResponse, error)
+	mustEmbedUnimplementedSettingsServiceServer()
+}
+
+// UnimplementedSettingsServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedSettingsServiceServer struct{}
+
+func (UnimplementedSettingsServiceServer) FindListByAppName(context.Context, *FindSettingListByAppNameRequest) (*FindSettingListByAppNameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindListByAppName not implemented")
+}
+func (UnimplementedSettingsServiceServer) FindByName(context.Context, *FindSettingByNameRequest) (*FindSettingByNameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByName not implemented")
+}
+func (UnimplementedSettingsServiceServer) mustEmbedUnimplementedSettingsServiceServer() {}
+func (UnimplementedSettingsServiceServer) testEmbeddedByValue()                         {}
+
+// UnsafeSettingsServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SettingsServiceServer will
+// result in compilation errors.
+type UnsafeSettingsServiceServer interface {
+	mustEmbedUnimplementedSettingsServiceServer()
+}
+
+func RegisterSettingsServiceServer(s grpc.ServiceRegistrar, srv SettingsServiceServer) {
+	// If the following call pancis, it indicates UnimplementedSettingsServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&SettingsService_ServiceDesc, srv)
+}
+
+func _SettingsService_FindListByAppName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindSettingListByAppNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingsServiceServer).FindListByAppName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SettingsService_FindListByAppName_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingsServiceServer).FindListByAppName(ctx, req.(*FindSettingListByAppNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SettingsService_FindByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindSettingByNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingsServiceServer).FindByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SettingsService_FindByName_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingsServiceServer).FindByName(ctx, req.(*FindSettingByNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// SettingsService_ServiceDesc is the grpc.ServiceDesc for SettingsService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var SettingsService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "proto.SettingsService",
+	HandlerType: (*SettingsServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "FindListByAppName",
+			Handler:    _SettingsService_FindListByAppName_Handler,
+		},
+		{
+			MethodName: "FindByName",
+			Handler:    _SettingsService_FindByName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

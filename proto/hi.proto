@@ -13,11 +13,19 @@ service Hi {
 
 // code value service
 service CodeValueService {
-    rpc FindListByCodeType(FindListByCodeTypeRequest) returns (FindListByCodeTypeResponse);
-    rpc FindOneByCode(FindOneByCodeRequest) returns (FindOneByCodeResponse);
+    rpc FindListByCodeType(FindCodeValueListByCodeTypeRequest) returns (FindCodeValueListByCodeTypeResponse);
+    rpc FindOneByCode(FindOneCodeValueByCodeRequest) returns (FindOneCodeValueByCodeResponse);
 }
 
-
+// 定义 Settings 服务
+service SettingsService {
+    // 根据 appNameList 获取 Setting 列表
+    rpc FindListByAppName(FindSettingListByAppNameRequest) returns (FindSettingListByAppNameResponse);
+  
+    // 根据 appName 和 name 获取单个 Setting
+    rpc FindByName(FindSettingByNameRequest) returns (FindSettingByNameResponse);
+}
+  
 message BaseResponse {
 	int32 code = 1;
 	string message = 2;
@@ -38,12 +46,12 @@ message HealthCheckResponse {
 }
 
 // 请求消息类型
-message FindListByCodeTypeRequest {
+message FindCodeValueListByCodeTypeRequest {
     string app = 1;        // 应用标识
     string codeType = 2;   // 代码类型
 }
 
-message FindOneByCodeRequest {
+message FindOneCodeValueByCodeRequest {
     string app = 1;        // 应用标识
     string codeType = 2;   // 代码类型
     string code = 3;       // 代码
@@ -57,10 +65,54 @@ message CodeValue {
     string memo = 4;       // 备注
 }
 
-message FindListByCodeTypeResponse {
+message FindCodeValueListByCodeTypeResponse {
     repeated CodeValue codeValues = 1; // 返回的代码值列表
 }
 
-message FindOneByCodeResponse {
+message FindOneCodeValueByCodeResponse {
     CodeValue codeValue = 1;           // 单个代码值
+}
+
+// FindListByAppName 请求消息
+message FindSettingListByAppNameRequest {
+    repeated string appNameList = 1; // 多个应用名称
+}
+  
+// FindListByAppName 响应消息
+message FindSettingListByAppNameResponse {
+    repeated Setting settings = 1; // 返回的设置列表
+}
+
+// FindByName 请求消息
+message FindSettingByNameRequest {
+    string appName = 1; // 应用名称
+    string name = 2;     // 设置名称
+}
+  
+// FindByName 响应消息
+message FindSettingByNameResponse {
+    Setting setting = 1; // 返回的单个设置
+}
+
+// Setting 结构定义
+message Setting {
+    string appName = 1;            // 应用名称
+    ValueFieldType valueType = 2;  // 值的类型
+    bool protectedInUi = 3;       // 是否是受保护的 UI 属性
+    string name = 4;                // 键名
+    oneof value {
+        string stringValue = 5;      // 字符串类型的值
+        bool booleanValue = 6;       // 布尔类型的值
+        double float64Value = 7;     // 浮点数类型的值
+        string datetimeValue = 8;    // 日期时间类型的值 (ISO 8601 格式)
+    }
+}
+  
+// ValueFieldType 的枚举定义
+enum ValueFieldType {
+    VALUE_FIELD_TYPE_UNSPECIFIED = 0; // 默认类型，未指定
+    VALUE_FIELD_TYPE_STRING = 1;      // 字符串
+    VALUE_FIELD_TYPE_BOOLEAN = 2;     // 布尔值
+    VALUE_FIELD_TYPE_FLOAT64 = 3;     // 浮点数
+    VALUE_FIELD_TYPE_DATETIME = 4;    // 日期时间
 }
