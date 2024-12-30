@@ -43,6 +43,7 @@ func clientIniStartupAction() app.IStartupAction {
 		sdk.SetGlobalClient(_client)
 		app.Context.RegistInstanceAs(_client, new(pb.HiClient))
 		app.Context.RegistInstanceAs(_client, new(pb.CodeValueServiceClient))
+		app.Context.RegistInstanceAs(_client, new(pb.SettingsServiceClient))
 		app.Context.RegistInstanceAs(_client, new(sdk.Client))
 	})
 }
