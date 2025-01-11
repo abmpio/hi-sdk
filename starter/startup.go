@@ -2,6 +2,7 @@ package starter
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/abmpio/abmp/pkg/log"
@@ -12,6 +13,8 @@ import (
 )
 
 func init() {
+	fmt.Println("abmpio.hi_sdk.starter init")
+
 	app.RegisterOneStartupAction(clientIniStartupAction)
 }
 
