@@ -10,7 +10,7 @@ import (
 const (
 	defaultGrpcPort = 8032
 	// send pings every 10 seconds if there is no activity
-	defaultKeepaliveTime = 10 * time.Second
+	defaultKeepaliveTime = 30 * time.Second
 	// wait 1 second for ping ack before considering the connection dead
 	defaultKeepaliveTimeout = time.Second
 	// send pings even without active streams
