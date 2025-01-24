@@ -17,6 +17,7 @@ type Client struct {
 	pb.HiClient
 	pb.CodeValueServiceClient
 	pb.SettingsServiceClient
+	pb.AppServiceClient
 }
 
 func NewClient(opts ...Option) *Client {
@@ -51,6 +52,7 @@ func (c *Client) InitConnnection(opts ...grpc.DialOption) error {
 	c.HiClient = pb.NewHiClient(conn)
 	c.CodeValueServiceClient = pb.NewCodeValueServiceClient(conn)
 	c.SettingsServiceClient = pb.NewSettingsServiceClient(conn)
+	c.AppServiceClient = pb.NewAppServiceClient(conn)
 
 	return nil
 }
