@@ -16,7 +16,6 @@ import (
 func init() {
 	fmt.Println("abmpio.hi_sdk.starter init")
 
-	app.RegisterOneStartupAction(serviceConfigurator)
 	cli.ConfigureService(serviceConfigurator)
 }
 
