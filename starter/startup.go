@@ -24,7 +24,7 @@ func serviceConfigurator(wa cli.CliApplication) {
 		return
 	}
 	opt := options.GetOptions()
-	_client := sdk.NewClient(sdk.WithHost(opt.HiServerHost), sdk.WithPort(opt.Port))
+	_client := sdk.NewClient(sdk.WithHost(opt.Host), sdk.WithPort(opt.Port))
 	//测试ping
 	for {
 		err := _client.InitConnnection()

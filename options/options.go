@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	ConfigurationKey string = "plugins.hisdk"
+	ConfigurationKey string = "hisdk"
 )
 
 var (
@@ -22,9 +22,10 @@ var (
 type HiSdkOptions struct {
 	// 插件所在的应用名称，当直接使用service中的FindOneByCode函数时默认将获取此app范围内的值
 	// 如果不指定，则获取所有的
-	DefaultApp   string `json:"defaultApp"`
-	HiServerHost string `json:"hiServerHost"`
-	Port         int32  `json:"port"`
+	DefaultApp string `json:"defaultApp"`
+	Host       string `json:"host"`
+	Port       int32  `json:"port"`
+	Disabled   bool   `json:"disabled"`
 }
 
 func (o *HiSdkOptions) normalize() {
@@ -32,8 +33,8 @@ func (o *HiSdkOptions) normalize() {
 		appName := host.GetHostEnvironment().GetEnvString(host.ENV_AppName)
 		o.DefaultApp = appName
 	}
-	if len(o.HiServerHost) <= 0 {
-		o.HiServerHost = "127.0.0.1"
+	if len(o.Host) <= 0 {
+		o.Host = "127.0.0.1"
 	}
 	if o.Port <= 0 {
 		o.Port = 8032
