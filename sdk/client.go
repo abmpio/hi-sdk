@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/abmpio/abmp/pkg/log"
-	pb "github.com/abmpio/hi/sdk/proto"
+	pb "github.com/abmpio/hi-sdk/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

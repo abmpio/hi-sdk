@@ -8,9 +8,9 @@ import (
 	"github.com/abmpio/abmp/pkg/log"
 	"github.com/abmpio/app"
 	"github.com/abmpio/app/cli"
-	"github.com/abmpio/hi/sdk"
-	"github.com/abmpio/hi/sdk/options"
-	pb "github.com/abmpio/hi/sdk/proto"
+	"github.com/abmpio/hi-sdk/options"
+	pb "github.com/abmpio/hi-sdk/proto"
+	"github.com/abmpio/hi-sdk/sdk"
 )
 
 func init() {
