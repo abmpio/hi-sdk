@@ -48,4 +48,5 @@ func serviceConfigurator(wa cli.CliApplication) {
 	app.Context.RegistInstanceAs(_client, new(pb.CodeValueServiceClient))
 	app.Context.RegistInstanceAs(_client, new(pb.SettingsServiceClient))
 	app.Context.RegistInstanceAs(_client, new(sdk.Client))
+	app.Context.RegistInstanceAs(_client, new(pb.SmsServiceClient))
 }
