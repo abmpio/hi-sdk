@@ -34,6 +34,12 @@ service AppService {
     rpc FindAppBuiltinRoleListByApp(FindAppBuiltinRoleListByAppRequest) returns (FindAppBuiltinRoleListByAppResponse);
 }
 
+// sms service
+service SmsService {
+    // send sms message
+    rpc SendSmsMessage(SendSmsMessageRequest) returns (SendSmsMessageResponse);
+}
+
 message BaseResponse {
 	int32 code = 1;
 	string message = 2;
@@ -151,4 +157,27 @@ message FindAppBuiltinRoleListByAppResponse {
     string defaultRoleName = 1;
     // 角色列表
     repeated AppBuiltinRoleInfo list = 2;
+}
+
+message SendSmsMessageRequest {
+	string tenantId    = 1;
+    // phoneNumber
+	string phoneNumber = 2;
+	// 短信模板 Code。
+	string templateCode = 3;
+	// 短信模板变量对应的实际值。key为参数名 value为参数值
+	map<string, string> templateParam = 4;
+	// 外部流水扩展字段。
+	string outId = 5;
+}
+
+message SendSmsMessageResponse {
+    // 短信发送成功的流水号,发送回执 ID。
+	string bizId            = 1;
+	// 短信发送的请求id
+	string requestId        = 2;
+	// 短信发送状态
+	string status           = 3;
+	// 发送结果描述
+	string resultMessage    = 4;
 }

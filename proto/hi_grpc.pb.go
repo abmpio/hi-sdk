@@ -556,3 +556,111 @@ var AppService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "hi.proto",
 }
+
+const (
+	SmsService_SendSmsMessage_FullMethodName = "/proto.SmsService/SendSmsMessage"
+)
+
+// SmsServiceClient is the client API for SmsService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// sms service
+type SmsServiceClient interface {
+	// send sms message
+	SendSmsMessage(ctx context.Context, in *SendSmsMessageRequest, opts ...grpc.CallOption) (*SendSmsMessageResponse, error)
+}
+
+type smsServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewSmsServiceClient(cc grpc.ClientConnInterface) SmsServiceClient {
+	return &smsServiceClient{cc}
+}
+
+func (c *smsServiceClient) SendSmsMessage(ctx context.Context, in *SendSmsMessageRequest, opts ...grpc.CallOption) (*SendSmsMessageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SendSmsMessageResponse)
+	err := c.cc.Invoke(ctx, SmsService_SendSmsMessage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// SmsServiceServer is the server API for SmsService service.
+// All implementations must embed UnimplementedSmsServiceServer
+// for forward compatibility.
+//
+// sms service
+type SmsServiceServer interface {
+	// send sms message
+	SendSmsMessage(context.Context, *SendSmsMessageRequest) (*SendSmsMessageResponse, error)
+	mustEmbedUnimplementedSmsServiceServer()
+}
+
+// UnimplementedSmsServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedSmsServiceServer struct{}
+
+func (UnimplementedSmsServiceServer) SendSmsMessage(context.Context, *SendSmsMessageRequest) (*SendSmsMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendSmsMessage not implemented")
+}
+func (UnimplementedSmsServiceServer) mustEmbedUnimplementedSmsServiceServer() {}
+func (UnimplementedSmsServiceServer) testEmbeddedByValue()                    {}
+
+// UnsafeSmsServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SmsServiceServer will
+// result in compilation errors.
+type UnsafeSmsServiceServer interface {
+	mustEmbedUnimplementedSmsServiceServer()
+}
+
+func RegisterSmsServiceServer(s grpc.ServiceRegistrar, srv SmsServiceServer) {
+	// If the following call pancis, it indicates UnimplementedSmsServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&SmsService_ServiceDesc, srv)
+}
+
+func _SmsService_SendSmsMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendSmsMessageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SmsServiceServer).SendSmsMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SmsService_SendSmsMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SmsServiceServer).SendSmsMessage(ctx, req.(*SendSmsMessageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// SmsService_ServiceDesc is the grpc.ServiceDesc for SmsService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var SmsService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "proto.SmsService",
+	HandlerType: (*SmsServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "SendSmsMessage",
+			Handler:    _SmsService_SendSmsMessage_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "hi.proto",
+}
