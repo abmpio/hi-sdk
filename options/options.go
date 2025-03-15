@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	ConfigurationKey string = "hisdk"
+	ConfigurationKey string = "hi_sdk"
 )
 
 var (
