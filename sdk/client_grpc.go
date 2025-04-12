@@ -9,6 +9,14 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+type IClient interface {
+	pb.HiClient
+	pb.AppServiceClient
+	pb.CodeValueServiceClient
+	pb.SmsServiceClient
+	pb.SettingsServiceClient
+}
+
 type Client struct {
 	option *Options
 
@@ -20,6 +28,8 @@ type Client struct {
 	pb.AppServiceClient
 	pb.SmsServiceClient
 }
+
+var _ IClient = (*Client)(nil)
 
 func NewClient(opts ...Option) *Client {
 	client := &Client{
@@ -43,7 +53,7 @@ func (c *Client) InitConnnection(opts ...grpc.DialOption) error {
 	mergedOpts = append(mergedOpts, opts...)
 	conn, err := grpc.NewClient(c.option.getHostTarget(), mergedOpts...)
 	if err != nil {
-		log.Logger.Error(fmt.Sprintf("occur error when create hi grpc server connection , host:%s,error: %s",
+		log.Logger.Error(fmt.Sprintf("occur error when initialize hi grpc connection, host:%s,error: %s",
 			c.option.getHostTarget(), err.Error()))
 		return err
 	}

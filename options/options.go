@@ -41,6 +41,10 @@ func (o *HiSdkOptions) normalize() {
 	}
 }
 
+func (o *HiSdkOptions) String() string {
+	return fmt.Sprintf("%s:%d,defaultApp:%s", o.Host, o.Port, o.DefaultApp)
+}
+
 func GetOptions() *HiSdkOptions {
 	_once.Do(func() {
 		if err := configurationx.GetInstance().UnmarshFromKey(ConfigurationKey, &_options, func(dc *mapstructure.DecoderConfig) {
