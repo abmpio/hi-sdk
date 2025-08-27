@@ -2,7 +2,7 @@ syntax = "proto3";
 
 // import "google/protobuf/struct.proto";
 // import "google/protobuf/timestamp.proto";
-import "google/protobuf/empty.proto";
+// import "google/protobuf/empty.proto";
 
 option go_package="./proto";
 
@@ -27,12 +27,6 @@ service SettingsService {
     rpc FindByName(FindSettingByNameRequest) returns (FindSettingByNameResponse);
 }
 
-service AppService {
-    // Ensure that a list of app builtin role items exist for a specific app
-    rpc EnsureAppBuiltinRoleListExist(EnsureAppBuiltinRoleListExistRequest) returns (google.protobuf.Empty);
-    // find list by app
-    rpc FindAppBuiltinRoleListByApp(FindAppBuiltinRoleListByAppRequest) returns (FindAppBuiltinRoleListByAppResponse);
-}
 
 // sms service
 service SmsService {
@@ -129,34 +123,6 @@ enum ValueFieldType {
     VALUE_FIELD_TYPE_BOOLEAN = 2;     // 布尔值
     VALUE_FIELD_TYPE_FLOAT64 = 3;     // 浮点数
     VALUE_FIELD_TYPE_DATETIME = 4;    // 日期时间
-}
-
-// app builtin role information
-message AppBuiltinRoleInfo {
-    string name = 1;
-    string display_name = 2;
-    string description = 3;
-}
-
-
-// Request for EnsureAppBuiltinRoleListExist
-message EnsureAppBuiltinRoleListExistRequest {
-    string app = 1;
-    // 新用户默认的角色
-    string defaultRoleName = 2;
-    repeated AppBuiltinRoleInfo list = 3;
-}
-
-// Request for FindAppBuiltinRoleListByApp
-message FindAppBuiltinRoleListByAppRequest {
-    string app = 1;
-}
-
-message FindAppBuiltinRoleListByAppResponse {
-    // 新用户默认的角色
-    string defaultRoleName = 1;
-    // 角色列表
-    repeated AppBuiltinRoleInfo list = 2;
 }
 
 message SendSmsMessageRequest {

@@ -6,11 +6,9 @@ import (
 	"github.com/abmpio/abmp/pkg/log"
 	pb "github.com/abmpio/hi-sdk/proto"
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type NullableClient struct {
-	nullableAppServiceClient
 	nullableCodeValueServiceClient
 	nullableSmsServiceClient
 	nullableSettingsServiceClient
@@ -24,25 +22,6 @@ func (*NullableClient) HealthCheck(ctx context.Context, in *pb.HealthCheckReques
 	return &pb.HealthCheckResponse{
 		Status: pb.HealthCheckResponse_NOT_SERVING,
 	}, nil
-}
-
-// #endregion
-
-type nullableAppServiceClient struct {
-}
-
-// #region pb.AppServiceClient members
-
-// Ensure that a list of app builtin role items exist for a specific app
-func (*nullableAppServiceClient) EnsureAppBuiltinRoleListExist(ctx context.Context, in *pb.EnsureAppBuiltinRoleListExistRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	log.Logger.Warn("NullableClient.EnsureAppBuiltinRoleListExist method")
-	return &emptypb.Empty{}, nil
-}
-
-// find list by app
-func (*nullableAppServiceClient) FindAppBuiltinRoleListByApp(ctx context.Context, in *pb.FindAppBuiltinRoleListByAppRequest, opts ...grpc.CallOption) (*pb.FindAppBuiltinRoleListByAppResponse, error) {
-	log.Logger.Warn("NullableClient.EnsureAppBuiltinRoleListExist method")
-	return &pb.FindAppBuiltinRoleListByAppResponse{}, nil
 }
 
 // #endregion

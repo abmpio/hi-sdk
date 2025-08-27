@@ -11,7 +11,6 @@ import (
 
 type IClient interface {
 	pb.HiClient
-	pb.AppServiceClient
 	pb.CodeValueServiceClient
 	pb.SmsServiceClient
 	pb.SettingsServiceClient
@@ -25,7 +24,6 @@ type Client struct {
 	pb.HiClient
 	pb.CodeValueServiceClient
 	pb.SettingsServiceClient
-	pb.AppServiceClient
 	pb.SmsServiceClient
 }
 
@@ -63,7 +61,6 @@ func (c *Client) InitConnnection(opts ...grpc.DialOption) error {
 	c.HiClient = pb.NewHiClient(conn)
 	c.CodeValueServiceClient = pb.NewCodeValueServiceClient(conn)
 	c.SettingsServiceClient = pb.NewSettingsServiceClient(conn)
-	c.AppServiceClient = pb.NewAppServiceClient(conn)
 	c.SmsServiceClient = pb.NewSmsServiceClient(conn)
 
 	return nil
