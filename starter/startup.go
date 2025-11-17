@@ -14,7 +14,9 @@ import (
 )
 
 func init() {
-	fmt.Println("abmpio.hi_sdk.starter init")
+	if app.IsServerMode() {
+		fmt.Println("abmpio.hi_sdk.starter init")
+	}
 
 	cli.ConfigureService(serviceConfigurator)
 }
