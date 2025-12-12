@@ -107,11 +107,12 @@ message FindSettingByNameResponse {
 message UpdateSettingValueRequest {
     string appName = 1; // 应用名称
     string name = 2;     // 设置名称
+    ValueFieldType valueType = 3;  // 值的类型
     oneof value {
-        string stringValue = 3;      // 字符串类型的值
-        bool booleanValue = 4;       // 布尔类型的值
-        double float64Value = 5;     // 浮点数类型的值
-        string datetimeValue = 6;    // 日期时间类型的值 (ISO 8601 格式)
+        string stringValue = 4;      // 字符串类型的值
+        bool booleanValue = 5;       // 布尔类型的值
+        double float64Value = 6;     // 浮点数类型的值
+        string datetimeValue = 7;    // 日期时间类型的值 (ISO 8601 格式)
     }
 }
 
