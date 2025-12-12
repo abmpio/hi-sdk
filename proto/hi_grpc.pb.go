@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -265,8 +266,9 @@ var CodeValueService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	SettingsService_FindListByAppName_FullMethodName = "/proto.SettingsService/FindListByAppName"
-	SettingsService_FindByName_FullMethodName        = "/proto.SettingsService/FindByName"
+	SettingsService_FindListByAppName_FullMethodName  = "/proto.SettingsService/FindListByAppName"
+	SettingsService_FindByName_FullMethodName         = "/proto.SettingsService/FindByName"
+	SettingsService_UpdateSettingValue_FullMethodName = "/proto.SettingsService/UpdateSettingValue"
 )
 
 // SettingsServiceClient is the client API for SettingsService service.
@@ -279,6 +281,8 @@ type SettingsServiceClient interface {
 	FindListByAppName(ctx context.Context, in *FindSettingListByAppNameRequest, opts ...grpc.CallOption) (*FindSettingListByAppNameResponse, error)
 	// 根据 appName 和 name 获取单个 Setting
 	FindByName(ctx context.Context, in *FindSettingByNameRequest, opts ...grpc.CallOption) (*FindSettingByNameResponse, error)
+	// 更新 Setting 的值
+	UpdateSettingValue(ctx context.Context, in *UpdateSettingValueRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type settingsServiceClient struct {
@@ -309,6 +313,16 @@ func (c *settingsServiceClient) FindByName(ctx context.Context, in *FindSettingB
 	return out, nil
 }
 
+func (c *settingsServiceClient) UpdateSettingValue(ctx context.Context, in *UpdateSettingValueRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, SettingsService_UpdateSettingValue_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SettingsServiceServer is the server API for SettingsService service.
 // All implementations must embed UnimplementedSettingsServiceServer
 // for forward compatibility.
@@ -319,6 +333,8 @@ type SettingsServiceServer interface {
 	FindListByAppName(context.Context, *FindSettingListByAppNameRequest) (*FindSettingListByAppNameResponse, error)
 	// 根据 appName 和 name 获取单个 Setting
 	FindByName(context.Context, *FindSettingByNameRequest) (*FindSettingByNameResponse, error)
+	// 更新 Setting 的值
+	UpdateSettingValue(context.Context, *UpdateSettingValueRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedSettingsServiceServer()
 }
 
@@ -334,6 +350,9 @@ func (UnimplementedSettingsServiceServer) FindListByAppName(context.Context, *Fi
 }
 func (UnimplementedSettingsServiceServer) FindByName(context.Context, *FindSettingByNameRequest) (*FindSettingByNameResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindByName not implemented")
+}
+func (UnimplementedSettingsServiceServer) UpdateSettingValue(context.Context, *UpdateSettingValueRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSettingValue not implemented")
 }
 func (UnimplementedSettingsServiceServer) mustEmbedUnimplementedSettingsServiceServer() {}
 func (UnimplementedSettingsServiceServer) testEmbeddedByValue()                         {}
@@ -392,6 +411,24 @@ func _SettingsService_FindByName_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SettingsService_UpdateSettingValue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateSettingValueRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingsServiceServer).UpdateSettingValue(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SettingsService_UpdateSettingValue_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingsServiceServer).UpdateSettingValue(ctx, req.(*UpdateSettingValueRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SettingsService_ServiceDesc is the grpc.ServiceDesc for SettingsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -406,6 +443,10 @@ var SettingsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FindByName",
 			Handler:    _SettingsService_FindByName_Handler,
+		},
+		{
+			MethodName: "UpdateSettingValue",
+			Handler:    _SettingsService_UpdateSettingValue_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

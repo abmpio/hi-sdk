@@ -2,7 +2,7 @@ syntax = "proto3";
 
 // import "google/protobuf/struct.proto";
 // import "google/protobuf/timestamp.proto";
-// import "google/protobuf/empty.proto";
+import "google/protobuf/empty.proto";
 
 option go_package="./proto";
 
@@ -25,6 +25,8 @@ service SettingsService {
   
     // 根据 appName 和 name 获取单个 Setting
     rpc FindByName(FindSettingByNameRequest) returns (FindSettingByNameResponse);
+    // 更新 Setting 的值
+    rpc UpdateSettingValue(UpdateSettingValueRequest) returns (google.protobuf.Empty);
 }
 
 
@@ -100,6 +102,17 @@ message FindSettingByNameRequest {
 // FindByName 响应消息
 message FindSettingByNameResponse {
     Setting setting = 1; // 返回的单个设置
+}
+
+message UpdateSettingValueRequest {
+    string appName = 1; // 应用名称
+    string name = 2;     // 设置名称
+    oneof value {
+        string stringValue = 3;      // 字符串类型的值
+        bool booleanValue = 4;       // 布尔类型的值
+        double float64Value = 5;     // 浮点数类型的值
+        string datetimeValue = 6;    // 日期时间类型的值 (ISO 8601 格式)
+    }
 }
 
 // Setting 结构定义
