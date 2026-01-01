@@ -26,6 +26,13 @@ type HiSdkOptions struct {
 	Host       string `json:"host"`
 	Port       int32  `json:"port"`
 	Disabled   bool   `json:"disabled"`
+
+	// 多少秒没数据就发一个 ping(秒)，默认值是30s
+	KeepaliveTimeSec *int32 `json:"keepaliveTimeSec"`
+	// ping 发出去后，等对方回 ACK 的最大时间(秒),默认值是5s
+	KeepaliveTimeoutSec *int32 `json:"keepaliveTimeoutSec"`
+	// 允许在没有流的情况下发送 keepalive,空闲也能保活，防止 NAT 回收
+	KeepalivePermitWithoutStream *bool `json:"keepalivePermitWithoutStream"`
 }
 
 func (o *HiSdkOptions) normalize() {
@@ -35,6 +42,18 @@ func (o *HiSdkOptions) normalize() {
 	}
 	if len(o.Host) <= 0 {
 		o.Host = "127.0.0.1"
+	}
+	if o.KeepalivePermitWithoutStream == nil {
+		v := true
+		o.KeepalivePermitWithoutStream = &v
+	}
+	if o.KeepaliveTimeSec == nil {
+		v := int32(30)
+		o.KeepaliveTimeSec = &v
+	}
+	if o.KeepaliveTimeoutSec == nil {
+		v := int32(5)
+		o.KeepaliveTimeoutSec = &v
 	}
 	if o.Port <= 0 {
 		o.Port = 8032

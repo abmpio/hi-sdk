@@ -27,21 +27,32 @@ func serviceConfigurator(wa cli.CliApplication) {
 	}
 	var _client sdk.IClient
 
-	opt := options.GetOptions()
-	if !opt.Disabled {
-		hiClient := sdk.NewClient(sdk.WithHost(opt.Host), sdk.WithPort(opt.Port))
+	clientOptions := options.GetOptions()
+	if !clientOptions.Disabled {
+		opts := []sdk.Option{
+			sdk.WithHost(clientOptions.Host),
+			sdk.WithPort(clientOptions.Port),
+		}
+		if clientOptions.KeepaliveTimeSec != nil && clientOptions.KeepaliveTimeoutSec != nil && clientOptions.KeepalivePermitWithoutStream != nil {
+			opts = append(opts, sdk.WithKeepalive(
+				time.Duration(*clientOptions.KeepaliveTimeSec)*time.Second,
+				time.Duration(*clientOptions.KeepaliveTimeoutSec)*time.Second,
+				*clientOptions.KeepalivePermitWithoutStream,
+			))
+		}
+		hiClient := sdk.NewClient(opts...)
 		//测试ping
 		for {
 			err := hiClient.InitConnnection()
 			if err != nil {
 				log.Logger.Warn(fmt.Sprintf("初始化hi grpc连接时出现异常,option:%s, err:%s",
-					opt.String(),
+					clientOptions.String(),
 					err.Error()))
 			} else {
 				res, err := hiClient.HealthCheck(context.TODO(), &pb.HealthCheckRequest{})
 				if err != nil {
 					log.Logger.Warn(fmt.Sprintf("检测hi grpc 服务健康是否正常时出现异常,option:%s, err:%s",
-						opt.String(),
+						clientOptions.String(),
 						err.Error()))
 				} else {
 					if res != nil {
