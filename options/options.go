@@ -8,6 +8,7 @@ import (
 	"github.com/abmpio/app/host"
 	"github.com/abmpio/configurationx"
 	"github.com/go-viper/mapstructure/v2"
+	"go.uber.org/zap"
 )
 
 const (
@@ -74,6 +75,7 @@ func GetOptions() *HiSdkOptions {
 			panic(err)
 		}
 		_options.normalize()
+		log.Logger.Info("hi sdk options", zap.Any("options", &_options))
 	})
 	return &_options
 }

@@ -9,6 +9,7 @@ require (
 	github.com/abmpio/app v0.0.0-20251117083545-747a0d94c71c
 	github.com/abmpio/configurationx v0.0.0-20250405143614-7d0f8d4abd37
 	github.com/go-viper/mapstructure/v2 v2.2.1
+	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.68.1
 	google.golang.org/protobuf v1.35.2
 )
@@ -48,7 +49,6 @@ require (
 	github.com/spf13/viper v1.20.1 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/net v0.34.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
